@@ -1,0 +1,39 @@
+<div class="page-container">
+  <button class="btn-back" (click)="back()">‹ Retour</button>
+
+  <div *ngIf="loading" class="loading">Chargement...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="session" class="detail-card">
+    <div class="detail-header">
+      <h2>{{ session.subject }}</h2>
+      <span [class]="session.status === 'ACTIVE' ? 'badge-active' : 'badge-closed'">
+        {{ session.status }}
+      </span>
+    </div>
+
+    <div class="detail-code">
+      <span class="code-label">Code de séance</span>
+      <span class="code-value">{{ session.code }}</span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">Professeur</span>
+        <span>{{ session.teacherName }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Créée le</span>
+        <span>{{ session.createdAt | date:'dd/MM/yyyy à HH:mm' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Expire le</span>
+        <span>{{ session.expiresAt | date:'dd/MM/yyyy à HH:mm' }}</span>
+      </div>
+    </div>
+
+    <div class="detail-actions" *ngIf="session.status === 'ACTIVE'">
+      <button class="btn-danger" (click)="close()">Fermer la séance</button>
+    </div>
+  </div>
+</div>
