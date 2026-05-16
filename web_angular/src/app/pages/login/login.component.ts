@@ -41,8 +41,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.isLoading = false;
-        // Rediriger vers le dashboard après login
-        this.router.navigate(['/students']);
+        this.router.navigate(['/sessions']);
       },
       error: (err) => {
         this.isLoading = false;

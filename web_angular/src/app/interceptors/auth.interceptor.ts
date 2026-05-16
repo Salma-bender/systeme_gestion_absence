@@ -22,13 +22,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      // 401 → session expirée, rediriger vers login
-      if (error.status === 401) {
+      // 401 ou 403 → token expiré/invalide, nettoyer et rediriger
+      if (error.status === 401 || error.status === 403) {
         authService.logout();
-        router.navigate(['/login']);
-      }
-      // 403 → accès refusé
-      if (error.status === 403) {
         router.navigate(['/login']);
       }
       return throwError(() => error);

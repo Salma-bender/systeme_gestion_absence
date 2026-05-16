@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Session } from '../../models/session.model';
 import { SessionService } from '../../services/session.service';
@@ -10,10 +10,14 @@ import { SessionService } from '../../services/session.service';
 })
 export class SessionsComponent implements OnInit {
   sessions: Session[] = [];
-  loading = false;
+  loading = true;
   error = '';
 
-  constructor(private sessionService: SessionService, private router: Router) {}
+  constructor(
+    private sessionService: SessionService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadSessions();
@@ -22,8 +26,17 @@ export class SessionsComponent implements OnInit {
   loadSessions(): void {
     this.loading = true;
     this.sessionService.getAllSessions().subscribe({
-      next: (data) => { this.sessions = data; this.loading = false; },
-      error: () => { this.error = 'Erreur lors du chargement'; this.loading = false; }
+      next: (data) => {
+        this.sessions = Array.isArray(data) ? data : (data as any).value || [];
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[Sessions] Erreur:', err.status);
+        this.error = `Erreur ${err.status} : impossible de charger les séances`;
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
