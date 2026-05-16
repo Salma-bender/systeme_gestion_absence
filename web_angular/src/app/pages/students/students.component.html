@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <h2>Gestion des Étudiants</h2>
+
+  <!-- Formulaire ajout étudiant -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Ajouter un étudiant</h5>
+
+      <div class="mb-3">
+        <label class="form-label">Prénom</label>
+        <input type="text" class="form-control" [(ngModel)]="firstName" placeholder="Prénom" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input type="text" class="form-control" [(ngModel)]="lastName" placeholder="Nom" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Photo</label>
+        <input type="file" class="form-control" accept="image/*" (change)="onFileChange($event)" />
+      </div>
+
+      <button class="btn btn-primary" (click)="submit()" [disabled]="loading">
+        {{ loading ? 'Enregistrement...' : 'Ajouter' }}
+      </button>
+
+      <div *ngIf="message" class="alert mt-3" [class.alert-success]="message.includes('succès')" [class.alert-danger]="!message.includes('succès')">
+        {{ message }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Liste des étudiants -->
+  <h5>Liste des étudiants ({{ students.length }})</h5>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of students">
+        <td>{{ s.id }}</td>
+        <td>{{ s.firstName }}</td>
+        <td>{{ s.lastName }}</td>
+      </tr>
+      <tr *ngIf="students.length === 0">
+        <td colspan="3" class="text-center text-muted">Aucun étudiant enregistré.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

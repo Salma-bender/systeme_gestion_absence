@@ -1,0 +1,22 @@
+<!-- Navbar — visible uniquement si connecté -->
+<nav class="navbar" *ngIf="authService.isLoggedIn()">
+  <div class="navbar-brand">
+    <span class="navbar-icon">🎓</span>
+    Système de Présence
+  </div>
+
+  <div class="navbar-links">
+    <a class="nav-link" routerLink="/students" routerLinkActive="active">Étudiants</a>
+    <a class="nav-link" routerLink="/attendance" routerLinkActive="active">Présences</a>
+  </div>
+
+  <div class="navbar-right">
+    <span class="nav-role">{{ authService.getRole() }}</span>
+    <button class="btn-logout" (click)="authService.logout()">
+      Déconnexion
+    </button>
+  </div>
+</nav>
+
+<!-- Contenu des pages -->
+<router-outlet />

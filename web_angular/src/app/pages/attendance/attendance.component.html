@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <h2>Liste des Présences</h2>
+
+  <button class="btn btn-outline-secondary mb-3" (click)="loadAttendances()">
+    🔄 Actualiser
+  </button>
+
+  <div *ngIf="message" class="alert alert-danger">{{ message }}</div>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Étudiant</th>
+        <th>Date / Heure</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of attendances">
+        <td>{{ a.id }}</td>
+        <td>{{ a.student?.firstName }} {{ a.student?.lastName }}</td>
+        <td>{{ a.detectedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+      </tr>
+      <tr *ngIf="attendances.length === 0">
+        <td colspan="3" class="text-center text-muted">Aucune présence enregistrée.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
