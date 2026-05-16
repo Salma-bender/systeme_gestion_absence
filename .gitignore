@@ -1,0 +1,38 @@
+# ==========================================
+# Backend Spring Boot
+# ==========================================
+Backend_Spring/target/
+Backend_Spring/.mvn/custom-truststore.jks
+Backend_Spring/.vscode/
+
+# ==========================================
+# Frontend Angular
+# ==========================================
+web_angular/node_modules/
+web_angular/dist/
+web_angular/.angular/cache/
+web_angular/.vscode/
+
+# ==========================================
+# Mobile React Native
+# ==========================================
+mobile_react_native/node_modules/
+mobile_react_native/.expo/
+mobile_react_native/.vscode/
+
+# ==========================================
+# AI API Python
+# ==========================================
+ai-api/__pycache__/
+ai-api/*.pyc
+ai-api/temp/
+ai-api/.venv/
+ai-api/venv/
+
+# ==========================================
+# Général
+# ==========================================
+.DS_Store
+Thumbs.db
+*.log
+.env
