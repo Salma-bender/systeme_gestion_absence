@@ -1,0 +1,43 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Séances</h2>
+    <button class="btn-primary" (click)="goCreate()">+ Nouvelle séance</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Chargement...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <table *ngIf="!loading && sessions.length > 0" class="data-table">
+    <thead>
+      <tr>
+        <th>Matière</th>
+        <th>Code</th>
+        <th>Professeur</th>
+        <th>Créée le</th>
+        <th>Expire le</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of sessions">
+        <td>{{ s.subject }}</td>
+        <td><span class="code-badge">{{ s.code }}</span></td>
+        <td>{{ s.teacherName }}</td>
+        <td>{{ s.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ s.expiresAt | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <span [class]="s.status === 'ACTIVE' ? 'badge-active' : 'badge-closed'">
+            {{ s.status }}
+          </span>
+        </td>
+        <td class="actions">
+          <button class="btn-secondary" (click)="viewDetails(s.id)">Détails</button>
+          <button class="btn-danger" *ngIf="s.status === 'ACTIVE'" (click)="closeSession(s.id)">Fermer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && sessions.length === 0" class="empty">Aucune séance trouvée.</p>
+</div>

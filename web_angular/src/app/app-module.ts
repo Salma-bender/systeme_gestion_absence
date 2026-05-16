@@ -10,6 +10,9 @@ import { StudentsComponent } from './pages/students/students.component';
 import { AttendanceComponent } from './pages/attendance/attendance.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { SessionsComponent } from './pages/sessions/sessions.component';
+import { SessionCreateComponent } from './pages/sessions/session-create.component';
+import { SessionDetailComponent } from './pages/sessions/session-detail.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
@@ -19,6 +22,9 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     AttendanceComponent,
     LoginComponent,
     RegisterComponent,
+    SessionsComponent,
+    SessionCreateComponent,
+    SessionDetailComponent,
   ],
   imports: [
     BrowserModule,
