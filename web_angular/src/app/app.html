@@ -1,23 +1,13 @@
-<!-- Navbar — visible uniquement si connecté -->
-<nav class="navbar" *ngIf="authService.isLoggedIn()">
-  <div class="navbar-brand">
-    <span class="navbar-icon">🎓</span>
-    Système de Présence
+<ng-container *ngIf="authService.isLoggedIn(); else publicLayout">
+  <app-navbar></app-navbar>
+  <div class="app-body">
+    <app-sidebar></app-sidebar>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
+</ng-container>
 
-  <div class="navbar-links">
-    <a class="nav-link" routerLink="/students" routerLinkActive="active">Étudiants</a>
-    <a class="nav-link" routerLink="/attendance" routerLinkActive="active">Présences</a>
-    <a class="nav-link" routerLink="/sessions" routerLinkActive="active">Séances</a>
-  </div>
-
-  <div class="navbar-right">
-    <span class="nav-role">{{ authService.getRole() }}</span>
-    <button class="btn-logout" (click)="authService.logout()">
-      Déconnexion
-    </button>
-  </div>
-</nav>
-
-<!-- Contenu des pages -->
-<router-outlet />
+<ng-template #publicLayout>
+  <router-outlet></router-outlet>
+</ng-template>

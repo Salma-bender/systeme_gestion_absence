@@ -1,0 +1,45 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Tableau de bord</h2>
+    <span class="nav-role">{{ authService.getRole() }}</span>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Chargement des statistiques...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div class="stats-grid" *ngIf="!isLoading">
+    <app-card
+      title="Total Étudiants"
+      [value]="stats.totalStudents"
+      icon="👥"
+      color="#3b82f6">
+    </app-card>
+
+    <app-card
+      title="Séances Actives"
+      [value]="stats.activeSessions"
+      icon="📅"
+      color="#10b981">
+    </app-card>
+
+    <app-card
+      title="Total Présences"
+      [value]="stats.totalAttendances"
+      icon="✅"
+      color="#f59e0b">
+    </app-card>
+  </div>
+
+  <div class="dashboard-welcome" *ngIf="!isLoading">
+    <div class="form-card">
+      <h3>Bienvenue dans le Système de Gestion des Présences</h3>
+      <p>Utilisez le menu de navigation pour accéder aux différentes sections de l'application.</p>
+      <ul class="dashboard-links">
+        <li><a routerLink="/students">👥 Gérer les étudiants</a></li>
+        <li><a routerLink="/sessions">📅 Gérer les séances</a></li>
+        <li><a routerLink="/attendance">✅ Consulter les présences</a></li>
+        <li *ngIf="authService.isAdmin()"><a routerLink="/settings">⚙️ Paramètres (enseignants)</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

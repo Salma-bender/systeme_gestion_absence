@@ -12,4 +12,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     List<Session> findByTeacherId(Long teacherId);
 
     boolean existsByCode(String code);
+
+    long countByStatus(Session.SessionStatus status);
 }
