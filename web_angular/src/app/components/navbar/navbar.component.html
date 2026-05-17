@@ -1,0 +1,19 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <span class="navbar-icon">🎓</span>
+    Système de Présence
+  </div>
+
+  <div class="navbar-links">
+    <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+    <a class="nav-link" routerLink="/students" routerLinkActive="active">Étudiants</a>
+    <a class="nav-link" routerLink="/attendance" routerLinkActive="active">Présences</a>
+    <a class="nav-link" routerLink="/sessions" routerLinkActive="active">Séances</a>
+    <a class="nav-link" routerLink="/settings" routerLinkActive="active" *ngIf="authService.isAdmin()">Paramètres</a>
+  </div>
+
+  <div class="navbar-right">
+    <span class="nav-role">{{ authService.getRole() }}</span>
+    <button class="btn-logout" (click)="authService.logout()">Déconnexion</button>
+  </div>
+</nav>

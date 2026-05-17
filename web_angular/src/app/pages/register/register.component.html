@@ -1,0 +1,95 @@
+<div class="register-container">
+  <div class="register-card">
+
+    <div class="register-header">
+      <div class="register-icon">📝</div>
+      <h1>Créer un compte</h1>
+      <p>Rejoignez le système de présence</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Nom -->
+      <div class="form-group">
+        <label for="name">Nom complet</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="John Doe"
+          [class.input-error]="name?.invalid && name?.touched"
+        />
+        <span class="error-text" *ngIf="name?.invalid && name?.touched">
+          <span *ngIf="name?.errors?.['required']">Le nom est requis.</span>
+          <span *ngIf="name?.errors?.['minlength']">Minimum 2 caractères.</span>
+        </span>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="john@test.com"
+          [class.input-error]="email?.invalid && email?.touched"
+          autocomplete="email"
+        />
+        <span class="error-text" *ngIf="email?.invalid && email?.touched">
+          <span *ngIf="email?.errors?.['required']">L'email est requis.</span>
+          <span *ngIf="email?.errors?.['email']">Format d'email invalide.</span>
+        </span>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          [class.input-error]="password?.invalid && password?.touched"
+          autocomplete="new-password"
+        />
+        <span class="error-text" *ngIf="password?.invalid && password?.touched">
+          <span *ngIf="password?.errors?.['required']">Le mot de passe est requis.</span>
+          <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères.</span>
+        </span>
+      </div>
+
+      <!-- Rôle -->
+      <div class="form-group">
+        <label for="role">Rôle</label>
+        <select id="role" formControlName="role" [class.input-error]="role?.invalid && role?.touched">
+          <option value="TEACHER">Professeur (TEACHER)</option>
+          <option value="ADMIN">Administrateur (ADMIN)</option>
+        </select>
+      </div>
+
+      <!-- Message succès -->
+      <div class="alert-success" *ngIf="successMessage">
+        ✅ {{ successMessage }}
+      </div>
+
+      <!-- Message erreur -->
+      <div class="alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Bouton submit -->
+      <button type="submit" class="btn-register" [disabled]="registerForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Créer le compte</span>
+        <span *ngIf="isLoading" class="spinner">Inscription...</span>
+      </button>
+
+    </form>
+
+    <!-- Lien vers login -->
+    <p class="login-link">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+
+  </div>
+</div>

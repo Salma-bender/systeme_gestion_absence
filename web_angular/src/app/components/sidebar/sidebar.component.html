@@ -1,0 +1,32 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <button class="sidebar-toggle" (click)="toggleSidebar()" title="Réduire le menu">
+    <span>{{ isCollapsed ? '▶' : '◀' }}</span>
+  </button>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-link" routerLink="/dashboard" routerLinkActive="active">
+      <span class="sidebar-icon">📊</span>
+      <span class="sidebar-label" *ngIf="!isCollapsed">Tableau de bord</span>
+    </a>
+
+    <a class="sidebar-link" routerLink="/students" routerLinkActive="active">
+      <span class="sidebar-icon">👥</span>
+      <span class="sidebar-label" *ngIf="!isCollapsed">Étudiants</span>
+    </a>
+
+    <a class="sidebar-link" routerLink="/attendance" routerLinkActive="active">
+      <span class="sidebar-icon">✅</span>
+      <span class="sidebar-label" *ngIf="!isCollapsed">Présences</span>
+    </a>
+
+    <a class="sidebar-link" routerLink="/sessions" routerLinkActive="active">
+      <span class="sidebar-icon">📅</span>
+      <span class="sidebar-label" *ngIf="!isCollapsed">Séances</span>
+    </a>
+
+    <a class="sidebar-link" routerLink="/settings" routerLinkActive="active" *ngIf="authService.isAdmin()">
+      <span class="sidebar-icon">⚙️</span>
+      <span class="sidebar-label" *ngIf="!isCollapsed">Paramètres</span>
+    </a>
+  </nav>
+</aside>

@@ -1,0 +1,53 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Présences</h2>
+    <button class="btn btn-outline-secondary btn-sm" (click)="loadAttendances()">🔄 Actualiser</button>
+  </div>
+
+  <!-- Filtres -->
+  <div class="form-card mb-3">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label">Filtrer par séance</label>
+        <input type="text" class="form-control" placeholder="Matière ou code..."
+          [(ngModel)]="filterSession" (input)="applyFilters()">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Filtrer par étudiant</label>
+        <input type="text" class="form-control" placeholder="Nom ou prénom..."
+          [(ngModel)]="filterStudent" (input)="applyFilters()">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">Effacer</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert alert-danger">{{ message }}</div>
+  <div *ngIf="loading" class="text-center text-muted py-3">Chargement...</div>
+
+  <div *ngIf="!loading">
+    <p class="text-muted small">{{ filtered.length }} présence(s) affichée(s)</p>
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Étudiant</th>
+          <th>Séance</th>
+          <th>Code</th>
+          <th>Date / Heure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of filtered">
+          <td>{{ a.studentFirstName }} {{ a.studentLastName }}</td>
+          <td>{{ a.sessionSubject }}</td>
+          <td><span class="badge bg-secondary">{{ a.sessionCode }}</span></td>
+          <td>{{ a.detectedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+        </tr>
+        <tr *ngIf="filtered.length === 0">
+          <td colspan="4" class="text-center text-muted">Aucune présence trouvée.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

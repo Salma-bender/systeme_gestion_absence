@@ -1,0 +1,71 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <!-- Logo / Titre -->
+    <div class="login-header">
+      <div class="login-icon">🎓</div>
+      <h1>Système de Présence</h1>
+      <p>Connectez-vous pour continuer</p>
+    </div>
+
+    <!-- Formulaire -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="admin@test.com"
+          [class.input-error]="email?.invalid && email?.touched"
+          autocomplete="email"
+        />
+        <span class="error-text" *ngIf="email?.invalid && email?.touched">
+          <span *ngIf="email?.errors?.['required']">L'email est requis.</span>
+          <span *ngIf="email?.errors?.['email']">Format d'email invalide.</span>
+        </span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          [class.input-error]="password?.invalid && password?.touched"
+          autocomplete="current-password"
+        />
+        <span class="error-text" *ngIf="password?.invalid && password?.touched">
+          <span *ngIf="password?.errors?.['required']">Le mot de passe est requis.</span>
+          <span *ngIf="password?.errors?.['minlength']">Minimum 4 caractères.</span>
+        </span>
+      </div>
+
+      <!-- Message d'erreur global -->
+      <div class="alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Bouton submit -->
+      <button
+        type="submit"
+        class="btn-login"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">Se connecter</span>
+        <span *ngIf="isLoading" class="spinner">Connexion...</span>
+      </button>
+
+    </form>
+
+    <!-- Lien vers register -->
+    <p class="register-link">
+      Pas encore de compte ? <a routerLink="/register">S'inscrire</a>
+    </p>
+
+  </div>
+</div>

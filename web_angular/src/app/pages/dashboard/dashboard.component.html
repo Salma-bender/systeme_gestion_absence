@@ -1,0 +1,76 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Tableau de bord</h2>
+    <span class="nav-role">{{ authService.getRole() }}</span>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Chargement des statistiques...</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!-- Statistiques -->
+  <div class="stats-grid" *ngIf="!isLoading">
+    <app-card
+      title="Total Étudiants"
+      [value]="stats.totalStudents"
+      icon="👥"
+      color="#3b82f6">
+    </app-card>
+
+    <app-card
+      title="Séances Actives"
+      [value]="stats.activeSessions"
+      icon="📅"
+      color="#10b981">
+    </app-card>
+
+    <app-card
+      title="Total Présences"
+      [value]="stats.totalAttendances"
+      icon="✅"
+      color="#f59e0b">
+    </app-card>
+
+    <app-card
+      title="Total Séances"
+      [value]="stats.totalSessions"
+      icon="📋"
+      color="#8b5cf6">
+    </app-card>
+  </div>
+
+  <!-- Dernières présences -->
+  <div class="form-card mt-4" *ngIf="!isLoading">
+    <h3>Dernières présences enregistrées</h3>
+    <table class="table table-sm table-hover mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>Étudiant</th>
+          <th>Séance</th>
+          <th>Date / Heure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of recentAttendances">
+          <td>{{ a.studentFirstName }} {{ a.studentLastName }}</td>
+          <td>{{ a.sessionSubject }} <span class="badge bg-secondary ms-1">{{ a.sessionCode }}</span></td>
+          <td>{{ a.detectedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="recentAttendances.length === 0">
+          <td colspan="3" class="text-center text-muted">Aucune présence enregistrée.</td>
+        </tr>
+      </tbody>
+    </table>
+    <a routerLink="/attendance" class="btn btn-outline-primary btn-sm">Voir tout l'historique →</a>
+  </div>
+
+  <!-- Liens rapides -->
+  <div class="form-card mt-3" *ngIf="!isLoading">
+    <h3>Navigation rapide</h3>
+    <ul class="dashboard-links">
+      <li><a routerLink="/students">👥 Gérer les étudiants</a></li>
+      <li><a routerLink="/sessions">📅 Gérer les séances</a></li>
+      <li><a routerLink="/attendance">✅ Consulter les présences</a></li>
+      <li *ngIf="authService.isAdmin()"><a routerLink="/settings">⚙️ Paramètres (enseignants)</a></li>
+    </ul>
+  </div>
+</div>
