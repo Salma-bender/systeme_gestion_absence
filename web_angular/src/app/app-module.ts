@@ -15,6 +15,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { SessionsComponent } from './pages/sessions/sessions.component';
 import { SessionCreateComponent } from './pages/sessions/session-create.component';
 import { SessionDetailComponent } from './pages/sessions/session-detail.component';
+import { MyAttendancesComponent } from './pages/my-attendances/my-attendances.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
@@ -38,6 +39,7 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     SessionsComponent,
     SessionCreateComponent,
     SessionDetailComponent,
+    MyAttendancesComponent,
     DashboardComponent,
     SettingsComponent,
     // Shared components

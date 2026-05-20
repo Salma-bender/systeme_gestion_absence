@@ -41,7 +41,13 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/sessions']);
+        // Rediriger selon le rôle
+        const role = this.authService.getRole();
+        if (role === 'STUDENT') {
+          this.router.navigate(['/my-attendances']);
+        } else {
+          this.router.navigate(['/sessions']);
+        }
       },
       error: (err) => {
         this.isLoading = false;

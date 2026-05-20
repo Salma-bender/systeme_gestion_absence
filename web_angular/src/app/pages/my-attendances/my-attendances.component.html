@@ -1,0 +1,49 @@
+<div class="student-container">
+
+  <!-- Header -->
+  <div class="student-header">
+    <div class="student-brand">🎓 Système de Présence</div>
+    <div class="student-info">
+      <span class="student-name">{{ studentName }}</span>
+      <span class="student-role">ÉTUDIANT</span>
+      <button class="btn-logout" (click)="logout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="student-content">
+    <h2>Mes Présences</h2>
+    <p class="subtitle">Historique de vos présences enregistrées</p>
+
+    <div *ngIf="loading" class="loading">Chargement...</div>
+    <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+    <!-- Compteur -->
+    <div *ngIf="!loading && !error" class="stats-card">
+      <span class="stats-number">{{ attendances.length }}</span>
+      <span class="stats-label">présence(s) enregistrée(s)</span>
+    </div>
+
+    <!-- Tableau -->
+    <table *ngIf="!loading && attendances.length > 0" class="att-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Heure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of attendances; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ a.detectedAt | date:'dd/MM/yyyy' }}</td>
+          <td>{{ a.detectedAt | date:'HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!loading && attendances.length === 0 && !error" class="empty">
+      Aucune présence enregistrée pour le moment.
+    </div>
+  </div>
+</div>

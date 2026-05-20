@@ -9,18 +9,20 @@ import { SessionCreateComponent } from './pages/sessions/session-create.componen
 import { SessionDetailComponent } from './pages/sessions/session-detail.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { MyAttendancesComponent } from './pages/my-attendances/my-attendances.component';
 import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login',    component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard',  component: DashboardComponent,  canActivate: [authGuard] },
-  { path: 'students',   component: StudentsComponent,   canActivate: [authGuard] },
-  { path: 'attendance', component: AttendanceComponent, canActivate: [authGuard] },
-  { path: 'sessions',        component: SessionsComponent,      canActivate: [authGuard] },
-  { path: 'sessions/create', component: SessionCreateComponent, canActivate: [authGuard] },
-  { path: 'sessions/:id',    component: SessionDetailComponent, canActivate: [authGuard] },
-  { path: 'settings',   component: SettingsComponent,   canActivate: [authGuard] },
+  { path: 'dashboard',       component: DashboardComponent,      canActivate: [authGuard] },
+  { path: 'students',        component: StudentsComponent,        canActivate: [authGuard] },
+  { path: 'attendance',      component: AttendanceComponent,      canActivate: [authGuard] },
+  { path: 'sessions',        component: SessionsComponent,        canActivate: [authGuard] },
+  { path: 'sessions/create', component: SessionCreateComponent,   canActivate: [authGuard] },
+  { path: 'sessions/:id',    component: SessionDetailComponent,   canActivate: [authGuard] },
+  { path: 'settings',        component: SettingsComponent,        canActivate: [authGuard] },
+  { path: 'my-attendances',  component: MyAttendancesComponent,   canActivate: [authGuard] },
   { path: '',  redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
 ];

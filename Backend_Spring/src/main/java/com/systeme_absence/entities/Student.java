@@ -17,4 +17,10 @@ public class Student {
 
     // URL ou chemin de la photo stockée
     private String photoPath;
+
+    // Authentification étudiant
+    @Column(unique = true)
+    private String email;
+
+    private String password;
 }

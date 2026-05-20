@@ -49,6 +49,8 @@ public class SecurityConfig {
                 // Routes ADMIN ou TEACHER
                 .requestMatchers("/api/session/**").hasAnyRole("ADMIN", "TEACHER")
                 .requestMatchers("/api/attendance/**").hasAnyRole("ADMIN", "TEACHER")
+                // Routes STUDENT — consulter ses propres présences
+                .requestMatchers("/api/student/**").hasAnyRole("STUDENT", "ADMIN", "TEACHER")
                 // Toute autre requête nécessite une authentification
                 .anyRequest().authenticated()
             )
