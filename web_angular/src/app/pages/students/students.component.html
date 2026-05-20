@@ -1,10 +1,10 @@
 <div class="page-container">
   <div class="page-header">
-    <h2>Gestion des Étudiants</h2>
+    <h2>{{ authService.isAdmin() ? 'Gestion des Étudiants' : 'Liste des Étudiants' }}</h2>
   </div>
 
-  <!-- Formulaire ajout étudiant -->
-  <div class="form-card">
+  <!-- Formulaire ajout : ADMIN uniquement -->
+  <div class="form-card" *ngIf="authService.isAdmin()">
     <h3 style="font-size:18px;font-weight:700;margin-bottom:20px;">Ajouter un étudiant</h3>
 
     <div class="form-group">
@@ -28,7 +28,7 @@
       </button>
     </div>
 
-    <div *ngIf="message" class="mt-3"
+    <div *ngIf="message"
          [style.color]="message.includes('succès') ? '#16a34a' : '#dc2626'"
          [style.background]="message.includes('succès') ? '#dcfce7' : '#fee2e2'"
          style="padding:12px 16px;border-radius:8px;margin-top:16px;">
@@ -36,28 +36,36 @@
     </div>
   </div>
 
-  <!-- Liste des étudiants -->
-  <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">
-    Liste des étudiants ({{ students.length }})
-  </h3>
+  <!-- Message d'erreur pour teacher -->
+  <div *ngIf="message && !authService.isAdmin()" class="error">{{ message }}</div>
 
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Prénom</th>
-        <th>Nom</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let s of students">
-        <td>{{ s.id }}</td>
-        <td>{{ s.firstName }}</td>
-        <td>{{ s.lastName }}</td>
-      </tr>
-      <tr *ngIf="students.length === 0">
-        <td colspan="3" class="empty">Aucun étudiant enregistré.</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Loading -->
+  <div *ngIf="listLoading" class="loading">Chargement des étudiants...</div>
+
+  <!-- Liste des étudiants -->
+  <ng-container *ngIf="!listLoading">
+    <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">
+      Liste des étudiants ({{ students.length }})
+    </h3>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Prénom</th>
+          <th>Nom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of students">
+          <td>{{ s.id }}</td>
+          <td>{{ s.firstName }}</td>
+          <td>{{ s.lastName }}</td>
+        </tr>
+        <tr *ngIf="students.length === 0">
+          <td colspan="3" class="empty">Aucun étudiant enregistré.</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
 </div>

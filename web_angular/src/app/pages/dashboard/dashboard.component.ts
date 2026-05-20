@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ApiService, DashboardStats } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { SessionService } from '../../services/session.service';
@@ -22,35 +24,26 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isAdmin()) {
+      // Single fast call for admin
       this.apiService.getStats().subscribe({
         next: (data) => { this.stats = data; this.isLoading = false; },
         error: () => { this.errorMessage = 'Erreur lors du chargement des statistiques.'; this.isLoading = false; }
       });
     } else {
-      this.loadTeacherStats();
+      // Fire all 3 requests in parallel with forkJoin
+      forkJoin({
+        students: this.apiService.getStudents().pipe(catchError(() => of([]))),
+        attendances: this.apiService.getAttendances().pipe(catchError(() => of([]))),
+        sessions: this.sessionService.getAllSessions().pipe(catchError(() => of([])))
+      }).subscribe({
+        next: ({ students, attendances, sessions }) => {
+          this.stats.totalStudents = students.length;
+          this.stats.totalAttendances = attendances.length;
+          this.stats.activeSessions = (sessions as any[]).filter((s: any) => s.status === 'ACTIVE').length;
+          this.isLoading = false;
+        },
+        error: () => { this.errorMessage = 'Erreur lors du chargement.'; this.isLoading = false; }
+      });
     }
-  }
-
-  private loadTeacherStats(): void {
-    let done = 0;
-    const check = () => { if (++done === 3) this.isLoading = false; };
-
-    this.apiService.getStudents().subscribe({
-      next: (s) => { this.stats.totalStudents = s.length; check(); },
-      error: () => check()
-    });
-
-    this.apiService.getAttendances().subscribe({
-      next: (a) => { this.stats.totalAttendances = a.length; check(); },
-      error: () => check()
-    });
-
-    this.sessionService.getAllSessions().subscribe({
-      next: (sessions) => {
-        this.stats.activeSessions = sessions.filter(s => s.status === 'ACTIVE').length;
-        check();
-      },
-      error: () => check()
-    });
   }
 }
