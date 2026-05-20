@@ -11,16 +11,17 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { MyAttendancesComponent } from './pages/my-attendances/my-attendances.component';
 import { authGuard } from './guards/auth.guard';
+import { teacherGuard } from './guards/teacher.guard';
 
 const routes: Routes = [
   { path: 'login',    component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard',       component: DashboardComponent,      canActivate: [authGuard] },
   { path: 'students',        component: StudentsComponent,        canActivate: [authGuard] },
-  { path: 'attendance',      component: AttendanceComponent,      canActivate: [authGuard] },
-  { path: 'sessions',        component: SessionsComponent,        canActivate: [authGuard] },
-  { path: 'sessions/create', component: SessionCreateComponent,   canActivate: [authGuard] },
-  { path: 'sessions/:id',    component: SessionDetailComponent,   canActivate: [authGuard] },
+  { path: 'attendance',      component: AttendanceComponent,      canActivate: [teacherGuard] },
+  { path: 'sessions',        component: SessionsComponent,        canActivate: [teacherGuard] },
+  { path: 'sessions/create', component: SessionCreateComponent,   canActivate: [teacherGuard] },
+  { path: 'sessions/:id',    component: SessionDetailComponent,   canActivate: [teacherGuard] },
   { path: 'settings',        component: SettingsComponent,        canActivate: [authGuard] },
   { path: 'my-attendances',  component: MyAttendancesComponent,   canActivate: [authGuard] },
   { path: '',  redirectTo: 'login', pathMatch: 'full' },
