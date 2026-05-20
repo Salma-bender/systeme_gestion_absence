@@ -52,7 +52,10 @@ export class RegisterComponent {
       error: (err) => {
         this.isLoading = false;
         if (err.status === 400) {
-          this.errorMessage = err.error || 'Données invalides.';
+          this.errorMessage = err.error?.error || err.error || 'Données invalides.';
+          if (typeof this.errorMessage === 'object') {
+            this.errorMessage = 'Données invalides.';
+          }
         } else {
           this.errorMessage = 'Erreur serveur. Réessayez.';
         }
