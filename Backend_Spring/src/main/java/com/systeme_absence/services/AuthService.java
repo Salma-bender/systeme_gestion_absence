@@ -42,8 +42,18 @@ public class AuthService {
                 .orElse("UNKNOWN")
                 .replace("ROLE_", "");
 
-        String token = jwtService.generateToken(loginDTO.getEmail(), role);
-        return new AuthResponseDTO(token, role);
+        String email = loginDTO.getEmail().trim().toLowerCase();
+        String token = jwtService.generateToken(email, role);
+
+        // Récupérer l'ID de l'utilisateur selon son rôle
+        Long userId = null;
+        if (role.equals("ADMIN")) {
+            userId = adminRepository.findByEmail(email).map(a -> a.getId()).orElse(null);
+        } else if (role.equals("TEACHER")) {
+            userId = teacherRepository.findByEmail(email).map(t -> t.getId()).orElse(null);
+        }
+
+        return new AuthResponseDTO(token, role, userId);
     }
 
     /**
@@ -89,6 +99,15 @@ public class AuthService {
 
         // Générer JWT directement après inscription
         String token = jwtService.generateToken(email, role);
-        return new AuthResponseDTO(token, role, "Compte créé avec succès");
+
+        // Récupérer l'ID du nouvel utilisateur
+        Long userId = null;
+        if (role.equals("ADMIN")) {
+            userId = adminRepository.findByEmail(email).map(a -> a.getId()).orElse(null);
+        } else {
+            userId = teacherRepository.findByEmail(email).map(t -> t.getId()).orElse(null);
+        }
+
+        return new AuthResponseDTO(token, role, userId, "Compte créé avec succès");
     }
 }

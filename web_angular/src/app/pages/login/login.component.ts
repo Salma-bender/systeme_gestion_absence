@@ -23,7 +23,7 @@ export class LoginComponent {
   ) {
     // Rediriger si déjà connecté
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/students']);
+      this.router.navigate(['/dashboard']);
     }
 
     this.loginForm = this.fb.group({
@@ -41,7 +41,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/sessions']);
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;

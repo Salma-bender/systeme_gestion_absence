@@ -1,14 +1,13 @@
-<div class="container mt-4">
-  <h2>Liste des Présences</h2>
+<div class="page-container">
+  <div class="page-header">
+    <h2>Liste des Présences</h2>
+    <button class="btn-secondary" (click)="loadAttendances()">🔄 Actualiser</button>
+  </div>
 
-  <button class="btn btn-outline-secondary mb-3" (click)="loadAttendances()">
-    🔄 Actualiser
-  </button>
+  <div *ngIf="message" class="error">{{ message }}</div>
 
-  <div *ngIf="message" class="alert alert-danger">{{ message }}</div>
-
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
+  <table class="data-table">
+    <thead>
       <tr>
         <th>ID</th>
         <th>Étudiant</th>
@@ -18,11 +17,11 @@
     <tbody>
       <tr *ngFor="let a of attendances">
         <td>{{ a.id }}</td>
-        <td>{{ a.student?.firstName }} {{ a.student?.lastName }}</td>
+        <td>{{ a.student.firstName }} {{ a.student.lastName }}</td>
         <td>{{ a.detectedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
       </tr>
       <tr *ngIf="attendances.length === 0">
-        <td colspan="3" class="text-center text-muted">Aucune présence enregistrée.</td>
+        <td colspan="3" class="empty">Aucune présence enregistrée.</td>
       </tr>
     </tbody>
   </table>

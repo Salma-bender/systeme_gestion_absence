@@ -18,6 +18,7 @@ export interface RegisterRequest {
 export interface AuthResponse {
   token: string;
   role: string;
+  userId: number;
   message?: string;
 }
 
@@ -27,6 +28,7 @@ export class AuthService {
   private readonly API_URL = 'http://localhost:8081/api/auth';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly ROLE_KEY = 'auth_role';
+  private readonly USER_ID_KEY = 'auth_user_id';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -36,6 +38,9 @@ export class AuthService {
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.token);
         localStorage.setItem(this.ROLE_KEY, response.role);
+        if (response.userId) {
+          localStorage.setItem(this.USER_ID_KEY, String(response.userId));
+        }
       })
     );
   }
@@ -46,6 +51,9 @@ export class AuthService {
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.token);
         localStorage.setItem(this.ROLE_KEY, response.role);
+        if (response.userId) {
+          localStorage.setItem(this.USER_ID_KEY, String(response.userId));
+        }
       })
     );
   }
@@ -54,6 +62,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.ROLE_KEY);
+    localStorage.removeItem(this.USER_ID_KEY);
     this.router.navigate(['/login']);
   }
 
@@ -65,6 +74,12 @@ export class AuthService {
   /** Récupérer le rôle de l'utilisateur connecté */
   getRole(): string | null {
     return localStorage.getItem(this.ROLE_KEY);
+  }
+
+  /** Récupérer l'ID de l'utilisateur connecté */
+  getUserId(): number | null {
+    const id = localStorage.getItem(this.USER_ID_KEY);
+    return id ? Number(id) : null;
   }
 
   /** Vérifier si l'utilisateur est connecté */

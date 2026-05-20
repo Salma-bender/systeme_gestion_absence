@@ -24,7 +24,7 @@ export class RegisterComponent {
   ) {
     // Rediriger si déjà connecté
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/students']);
+      this.router.navigate(['/dashboard']);
     }
 
     this.registerForm = this.fb.group({
@@ -47,7 +47,7 @@ export class RegisterComponent {
         this.isLoading = false;
         this.successMessage = response.message || 'Compte créé avec succès !';
         // Rediriger vers dashboard après 1 seconde
-        setTimeout(() => this.router.navigate(['/students']), 1000);
+        setTimeout(() => this.router.navigate(['/dashboard']), 1000);
       },
       error: (err) => {
         this.isLoading = false;

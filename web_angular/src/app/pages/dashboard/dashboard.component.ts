@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, DashboardStats } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,54 +16,41 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private sessionService: SessionService,
     public authService: AuthService
   ) {}
 
   ngOnInit(): void {
     if (this.authService.isAdmin()) {
-      // Admin: fetch stats from dedicated endpoint
       this.apiService.getStats().subscribe({
-        next: (data) => {
-          this.stats = data;
-          this.isLoading = false;
-        },
-        error: () => {
-          // Fallback: compute from individual endpoints
-          this.loadStatsFallback();
-        }
+        next: (data) => { this.stats = data; this.isLoading = false; },
+        error: () => { this.errorMessage = 'Erreur lors du chargement des statistiques.'; this.isLoading = false; }
       });
     } else {
-      // Teacher: compute from individual endpoints
-      this.loadStatsFallback();
+      this.loadTeacherStats();
     }
   }
 
-  private loadStatsFallback(): void {
-    let studentsLoaded = false;
-    let attendancesLoaded = false;
+  private loadTeacherStats(): void {
+    let done = 0;
+    const check = () => { if (++done === 3) this.isLoading = false; };
 
     this.apiService.getStudents().subscribe({
-      next: (students) => {
-        this.stats.totalStudents = students.length;
-        studentsLoaded = true;
-        if (attendancesLoaded) this.isLoading = false;
-      },
-      error: () => {
-        studentsLoaded = true;
-        if (attendancesLoaded) this.isLoading = false;
-      }
+      next: (s) => { this.stats.totalStudents = s.length; check(); },
+      error: () => check()
     });
 
     this.apiService.getAttendances().subscribe({
-      next: (attendances) => {
-        this.stats.totalAttendances = attendances.length;
-        attendancesLoaded = true;
-        if (studentsLoaded) this.isLoading = false;
+      next: (a) => { this.stats.totalAttendances = a.length; check(); },
+      error: () => check()
+    });
+
+    this.sessionService.getAllSessions().subscribe({
+      next: (sessions) => {
+        this.stats.activeSessions = sessions.filter(s => s.status === 'ACTIVE').length;
+        check();
       },
-      error: () => {
-        attendancesLoaded = true;
-        if (studentsLoaded) this.isLoading = false;
-      }
+      error: () => check()
     });
   }
 }
