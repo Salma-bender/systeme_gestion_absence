@@ -1,8 +1,8 @@
 <ng-container *ngIf="authService.isLoggedIn(); else publicLayout">
   <app-navbar></app-navbar>
   <div class="app-body">
-    <app-sidebar></app-sidebar>
-    <div class="main-content">
+    <app-sidebar *ngIf="!authService.isStudent()"></app-sidebar>
+    <div class="main-content" [class.no-sidebar]="authService.isStudent()">
       <router-outlet></router-outlet>
     </div>
   </div>

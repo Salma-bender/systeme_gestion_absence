@@ -9,21 +9,21 @@ import { SessionCreateComponent } from './pages/sessions/session-create.componen
 import { SessionDetailComponent } from './pages/sessions/session-detail.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { MyAttendancesComponent } from './pages/my-attendances/my-attendances.component';
 import { authGuard } from './guards/auth.guard';
 import { teacherGuard } from './guards/teacher.guard';
 
 const routes: Routes = [
   { path: 'login',    component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard',  component: DashboardComponent,  canActivate: [authGuard] },
-  { path: 'students',   component: StudentsComponent,   canActivate: [authGuard] },
-  // Séances et présences : TEACHER uniquement
-  { path: 'attendance', component: AttendanceComponent, canActivate: [teacherGuard] },
-  { path: 'sessions',        component: SessionsComponent,      canActivate: [teacherGuard] },
-  { path: 'sessions/create', component: SessionCreateComponent, canActivate: [teacherGuard] },
-  { path: 'sessions/:id',    component: SessionDetailComponent, canActivate: [teacherGuard] },
-  // Paramètres : ADMIN uniquement (géré dans le composant)
-  { path: 'settings',   component: SettingsComponent,   canActivate: [authGuard] },
+  { path: 'dashboard',       component: DashboardComponent,      canActivate: [authGuard] },
+  { path: 'students',        component: StudentsComponent,        canActivate: [authGuard] },
+  { path: 'attendance',      component: AttendanceComponent,      canActivate: [teacherGuard] },
+  { path: 'sessions',        component: SessionsComponent,        canActivate: [teacherGuard] },
+  { path: 'sessions/create', component: SessionCreateComponent,   canActivate: [teacherGuard] },
+  { path: 'sessions/:id',    component: SessionDetailComponent,   canActivate: [teacherGuard] },
+  { path: 'settings',        component: SettingsComponent,        canActivate: [authGuard] },
+  { path: 'my-attendances',  component: MyAttendancesComponent,   canActivate: [authGuard] },
   { path: '',  redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
 ];
