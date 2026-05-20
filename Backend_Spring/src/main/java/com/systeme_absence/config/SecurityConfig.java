@@ -42,13 +42,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Routes publiques
                 .requestMatchers("/api/auth/**").permitAll()
-                // Routes legacy (sans préfixe /api)
-                .requestMatchers("/students/**", "/attendance/**").hasAnyRole("ADMIN", "TEACHER")
                 // Routes ADMIN uniquement
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                // Routes ADMIN ou TEACHER
-                .requestMatchers("/api/session/**").hasAnyRole("ADMIN", "TEACHER")
-                .requestMatchers("/api/attendance/**").hasAnyRole("ADMIN", "TEACHER")
+                // Routes TEACHER uniquement (séances et présences)
+                .requestMatchers("/api/session/**").hasRole("TEACHER")
+                .requestMatchers("/api/attendance/**").hasRole("TEACHER")
+                .requestMatchers("/students/**", "/attendance/**").hasRole("TEACHER")
                 // Toute autre requête nécessite une authentification
                 .anyRequest().authenticated()
             )

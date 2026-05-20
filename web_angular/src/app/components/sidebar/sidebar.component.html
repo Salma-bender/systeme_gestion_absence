@@ -14,12 +14,12 @@
       <span class="sidebar-label" *ngIf="!isCollapsed">Étudiants</span>
     </a>
 
-    <a class="sidebar-link" routerLink="/attendance" routerLinkActive="active">
+    <a class="sidebar-link" routerLink="/attendance" routerLinkActive="active" *ngIf="!authService.isAdmin()">
       <span class="sidebar-icon">✅</span>
       <span class="sidebar-label" *ngIf="!isCollapsed">Présences</span>
     </a>
 
-    <a class="sidebar-link" routerLink="/sessions" routerLinkActive="active">
+    <a class="sidebar-link" routerLink="/sessions" routerLinkActive="active" *ngIf="!authService.isAdmin()">
       <span class="sidebar-icon">📅</span>
       <span class="sidebar-label" *ngIf="!isCollapsed">Séances</span>
     </a>
