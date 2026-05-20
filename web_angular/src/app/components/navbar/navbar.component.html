@@ -1,9 +1,15 @@
 <nav class="navbar">
+
+  <!-- Logo FST Marrakech -->
   <div class="navbar-brand">
-    <span class="navbar-icon">🎓</span>
-    Système de Présence
+    <img src="logo-fst.png" alt="FST Marrakech" class="fst-logo-img" />
+    <div class="fst-brand-text">
+      <span class="fst-title">FST Marrakech</span>
+      <span class="fst-subtitle">Système de Présence</span>
+    </div>
   </div>
 
+  <!-- Liens de navigation -->
   <div class="navbar-links">
     <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
     <a class="nav-link" routerLink="/students" routerLinkActive="active">Étudiants</a>
@@ -12,8 +18,12 @@
     <a class="nav-link" routerLink="/settings" routerLinkActive="active" *ngIf="authService.isAdmin()">Paramètres</a>
   </div>
 
+  <!-- Droite : rôle + déconnexion -->
   <div class="navbar-right">
     <span class="nav-role">{{ authService.getRole() }}</span>
-    <button class="btn-logout" (click)="authService.logout()">Déconnexion</button>
+    <button class="btn-logout" (click)="authService.logout()">
+      <span>⏻</span> Déconnexion
+    </button>
   </div>
+
 </nav>

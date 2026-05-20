@@ -1,10 +1,10 @@
-/* Centrer la carte sur toute la page */
+/* Login — Thème FST Marrakech */
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(135deg, #5C2E00 0%, #8B4513 60%, #C8922A 100%);
   padding: 1rem;
 }
 
@@ -14,10 +14,10 @@
   padding: 2.5rem 2rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(92, 46, 0, 0.35);
+  border-top: 4px solid #C8922A;
 }
 
-/* Header */
 .login-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -29,55 +29,51 @@
 }
 
 .login-header h1 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #5C2E00;
   margin: 0 0 0.25rem;
 }
 
 .login-header p {
-  color: #6b7280;
-  font-size: 0.9rem;
+  color: #6B4C3B;
+  font-size: 0.875rem;
   margin: 0;
 }
 
-/* Champs de formulaire */
-.form-group {
-  margin-bottom: 1.25rem;
-}
+.form-group { margin-bottom: 1.25rem; }
 
 .form-group label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #8B4513;
   margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1.5px solid #d1d5db;
+  border: 1.5px solid #E8D5C0;
   border-radius: 8px;
   font-size: 0.95rem;
-  color: #111827;
-  background: #f9fafb;
+  color: #2C1810;
+  background: #FDF6EC;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
   outline: none;
 }
 
 .form-group input:focus {
-  border-color: #0f3460;
-  box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.15);
+  border-color: #C8922A;
+  box-shadow: 0 0 0 3px rgba(200, 146, 42, 0.15);
   background: #fff;
 }
 
-.form-group input.input-error {
-  border-color: #ef4444;
-}
+.form-group input.input-error { border-color: #ef4444; }
 
-/* Messages d'erreur inline */
 .error-text {
   display: block;
   color: #ef4444;
@@ -85,7 +81,6 @@
   margin-top: 0.3rem;
 }
 
-/* Alerte erreur globale */
 .alert-error {
   background: #fef2f2;
   border: 1px solid #fecaca;
@@ -97,11 +92,10 @@
   text-align: center;
 }
 
-/* Bouton login */
 .btn-login {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, #0f3460, #1a1a2e);
+  background: linear-gradient(135deg, #5C2E00, #8B4513);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -110,6 +104,7 @@
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
   margin-top: 0.5rem;
+  letter-spacing: 0.3px;
 }
 
 .btn-login:hover:not(:disabled) {
@@ -117,15 +112,9 @@
   transform: translateY(-1px);
 }
 
-.btn-login:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+.btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.spinner {
-  display: inline-block;
-  animation: pulse 1s infinite;
-}
+.spinner { display: inline-block; animation: pulse 1s infinite; }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
@@ -136,15 +125,13 @@
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #6B4C3B;
 }
 
 .register-link a {
-  color: #0f3460;
-  font-weight: 600;
+  color: #8B4513;
+  font-weight: 700;
   text-decoration: none;
 }
 
-.register-link a:hover {
-  text-decoration: underline;
-}
+.register-link a:hover { color: #C8922A; text-decoration: underline; }

@@ -1,74 +1,22 @@
+/* Navbar FST Marrakech — définie dans styles.css via variables */
+/* Ce fichier étend les styles globaux pour le composant App */
+
 .navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, #1a1a2e, #0f3460);
-  padding: 0.75rem 2rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.navbar-icon {
-  font-size: 1.4rem;
-}
-
-.navbar-links {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.nav-link {
-  color: rgba(255,255,255,0.75);
-  text-decoration: none;
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  transition: background 0.2s, color 0.2s;
+  background: linear-gradient(135deg, #5C2E00 0%, #8B4513 100%);
+  border-bottom: 3px solid #C8922A;
 }
 
 .nav-link:hover,
 .nav-link.active {
-  background: rgba(255,255,255,0.15);
-  color: #ffffff;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.nav-role {
-  background: rgba(255,255,255,0.15);
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  letter-spacing: 0.05em;
+  background: rgba(200, 146, 42, 0.2);
+  color: #E8B84B;
 }
 
 .btn-logout {
-  background: #ef4444;
-  color: #ffffff;
-  border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
 .btn-logout:hover {
-  background: #dc2626;
-  transform: translateY(-1px);
+  background: rgba(255,255,255,0.2);
 }
