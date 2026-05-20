@@ -4,7 +4,8 @@
     Système de Présence
   </div>
 
-  <div class="navbar-links">
+  <!-- Liens visibles uniquement pour ADMIN et TEACHER -->
+  <div class="navbar-links" *ngIf="!authService.isStudent()">
     <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
     <a class="nav-link" routerLink="/students" routerLinkActive="active">Étudiants</a>
     <a class="nav-link" routerLink="/attendance" routerLinkActive="active">Présences</a>

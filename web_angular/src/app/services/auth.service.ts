@@ -76,4 +76,9 @@ export class AuthService {
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
   }
+
+  /** Vérifier si l'utilisateur est étudiant */
+  isStudent(): boolean {
+    return this.getRole() === 'STUDENT';
+  }
 }
