@@ -135,3 +135,10 @@
 }
 
 .register-link a:hover { color: #C8922A; text-decoration: underline; }
+
+.login-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
