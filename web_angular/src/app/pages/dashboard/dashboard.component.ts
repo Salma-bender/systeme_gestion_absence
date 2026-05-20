@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ApiService, DashboardStats } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,54 +18,32 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private sessionService: SessionService,
     public authService: AuthService
   ) {}
 
   ngOnInit(): void {
     if (this.authService.isAdmin()) {
-      // Admin: fetch stats from dedicated endpoint
+      // Single fast call for admin
       this.apiService.getStats().subscribe({
-        next: (data) => {
-          this.stats = data;
-          this.isLoading = false;
-        },
-        error: () => {
-          // Fallback: compute from individual endpoints
-          this.loadStatsFallback();
-        }
+        next: (data) => { this.stats = data; this.isLoading = false; },
+        error: () => { this.errorMessage = 'Erreur lors du chargement des statistiques.'; this.isLoading = false; }
       });
     } else {
-      // Teacher: compute from individual endpoints
-      this.loadStatsFallback();
+      // Fire all 3 requests in parallel with forkJoin
+      forkJoin({
+        students: this.apiService.getStudents().pipe(catchError(() => of([]))),
+        attendances: this.apiService.getAttendances().pipe(catchError(() => of([]))),
+        sessions: this.sessionService.getAllSessions().pipe(catchError(() => of([])))
+      }).subscribe({
+        next: ({ students, attendances, sessions }) => {
+          this.stats.totalStudents = students.length;
+          this.stats.totalAttendances = attendances.length;
+          this.stats.activeSessions = (sessions as any[]).filter((s: any) => s.status === 'ACTIVE').length;
+          this.isLoading = false;
+        },
+        error: () => { this.errorMessage = 'Erreur lors du chargement.'; this.isLoading = false; }
+      });
     }
-  }
-
-  private loadStatsFallback(): void {
-    let studentsLoaded = false;
-    let attendancesLoaded = false;
-
-    this.apiService.getStudents().subscribe({
-      next: (students) => {
-        this.stats.totalStudents = students.length;
-        studentsLoaded = true;
-        if (attendancesLoaded) this.isLoading = false;
-      },
-      error: () => {
-        studentsLoaded = true;
-        if (attendancesLoaded) this.isLoading = false;
-      }
-    });
-
-    this.apiService.getAttendances().subscribe({
-      next: (attendances) => {
-        this.stats.totalAttendances = attendances.length;
-        attendancesLoaded = true;
-        if (studentsLoaded) this.isLoading = false;
-      },
-      error: () => {
-        attendancesLoaded = true;
-        if (studentsLoaded) this.isLoading = false;
-      }
-    });
   }
 }

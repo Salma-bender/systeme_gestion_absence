@@ -4,8 +4,10 @@ import com.systeme_absence.dto.AuthResponseDTO;
 import com.systeme_absence.dto.LoginDTO;
 import com.systeme_absence.dto.RegisterDTO;
 import com.systeme_absence.entities.Admin;
+import com.systeme_absence.entities.Student;
 import com.systeme_absence.entities.Teacher;
 import com.systeme_absence.repositories.AdminRepository;
+import com.systeme_absence.repositories.StudentRepository;
 import com.systeme_absence.repositories.TeacherRepository;
 import com.systeme_absence.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AdminRepository adminRepository;
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
 
     /** Authentifie l'utilisateur et retourne un JWT avec son rôle */
     public AuthResponseDTO login(LoginDTO loginDTO) {
@@ -42,8 +45,18 @@ public class AuthService {
                 .orElse("UNKNOWN")
                 .replace("ROLE_", "");
 
-        String token = jwtService.generateToken(loginDTO.getEmail(), role);
-        return new AuthResponseDTO(token, role);
+        String email = loginDTO.getEmail().trim().toLowerCase();
+        String token = jwtService.generateToken(email, role);
+
+        // Récupérer l'ID de l'utilisateur selon son rôle
+        Long userId = null;
+        if (role.equals("ADMIN")) {
+            userId = adminRepository.findByEmail(email).map(a -> a.getId()).orElse(null);
+        } else if (role.equals("TEACHER")) {
+            userId = teacherRepository.findByEmail(email).map(t -> t.getId()).orElse(null);
+        }
+
+        return new AuthResponseDTO(token, role, userId);
     }
 
     /**
@@ -56,13 +69,14 @@ public class AuthService {
         String role = dto.getRole().toUpperCase();
 
         // Valider le rôle
-        if (!role.equals("ADMIN") && !role.equals("TEACHER")) {
-            throw new IllegalArgumentException("Rôle invalide. Utilisez ADMIN ou TEACHER.");
+        if (!role.equals("ADMIN") && !role.equals("TEACHER") && !role.equals("STUDENT")) {
+            throw new IllegalArgumentException("Rôle invalide. Utilisez ADMIN, TEACHER ou STUDENT.");
         }
 
-        // Vérifier unicité email dans les deux tables
+        // Vérifier unicité email dans les trois tables
         if (adminRepository.findByEmail(email).isPresent() ||
-            teacherRepository.findByEmail(email).isPresent()) {
+            teacherRepository.findByEmail(email).isPresent() ||
+            studentRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Cet email est déjà utilisé.");
         }
 
@@ -76,12 +90,20 @@ public class AuthService {
                 admin.setPassword(encodedPassword);
                 admin.setName(dto.getName());
                 adminRepository.save(admin);
-            } else {
+            } else if (role.equals("TEACHER")) {
                 Teacher teacher = new Teacher();
                 teacher.setEmail(email);
                 teacher.setPassword(encodedPassword);
                 teacher.setName(dto.getName());
                 teacherRepository.save(teacher);
+            } else {
+                // STUDENT
+                Student student = new Student();
+                student.setEmail(email);
+                student.setPassword(encodedPassword);
+                student.setFirstName(dto.getName().split(" ")[0]);
+                student.setLastName(dto.getName().contains(" ") ? dto.getName().substring(dto.getName().indexOf(" ") + 1) : "");
+                studentRepository.save(student);
             }
         } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException("Cet email est déjà utilisé.");
@@ -89,6 +111,15 @@ public class AuthService {
 
         // Générer JWT directement après inscription
         String token = jwtService.generateToken(email, role);
-        return new AuthResponseDTO(token, role, "Compte créé avec succès");
+
+        // Récupérer l'ID du nouvel utilisateur
+        Long userId = null;
+        if (role.equals("ADMIN")) {
+            userId = adminRepository.findByEmail(email).map(a -> a.getId()).orElse(null);
+        } else {
+            userId = teacherRepository.findByEmail(email).map(t -> t.getId()).orElse(null);
+        }
+
+        return new AuthResponseDTO(token, role, userId, "Compte créé avec succès");
     }
 }

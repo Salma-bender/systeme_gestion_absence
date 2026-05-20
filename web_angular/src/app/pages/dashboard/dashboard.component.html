@@ -36,8 +36,8 @@
       <p>Utilisez le menu de navigation pour accéder aux différentes sections de l'application.</p>
       <ul class="dashboard-links">
         <li><a routerLink="/students">👥 Gérer les étudiants</a></li>
-        <li><a routerLink="/sessions">📅 Gérer les séances</a></li>
-        <li><a routerLink="/attendance">✅ Consulter les présences</a></li>
+        <li *ngIf="!authService.isAdmin()"><a routerLink="/sessions">📅 Gérer les séances</a></li>
+        <li *ngIf="!authService.isAdmin()"><a routerLink="/attendance">✅ Consulter les présences</a></li>
         <li *ngIf="authService.isAdmin()"><a routerLink="/settings">⚙️ Paramètres (enseignants)</a></li>
       </ul>
     </div>

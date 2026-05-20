@@ -10,9 +10,9 @@ import com.systeme_absence.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +68,17 @@ public class SessionService {
     // ==========================================
     public List<SessionResponseDTO> getAllSessions() {
         return sessionRepository.findAll()
-                .stream().map(this::toDTO).collect(Collectors.toList());
+                .stream()
+                .map(session -> {
+                    // Auto-expire sessions that have passed their expiry time
+                    if (session.getStatus() == SessionStatus.ACTIVE &&
+                        LocalDateTime.now().isAfter(session.getExpiresAt())) {
+                        session.setStatus(SessionStatus.CLOSED);
+                        sessionRepository.save(session);
+                    }
+                    return toDTO(session);
+                })
+                .collect(Collectors.toList());
     }
 
     public List<SessionResponseDTO> getSessionsByTeacher(Long teacherId) {
@@ -100,7 +110,7 @@ public class SessionService {
     // ==========================================
     private String generateUniqueCode() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         String code;
         do {
             StringBuilder sb = new StringBuilder(6);

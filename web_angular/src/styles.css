@@ -39,6 +39,11 @@ body {
   background: var(--fst-cream);
 }
 
+/* Quand pas de sidebar (étudiant) */
+.main-content.no-sidebar {
+  padding: 32px 48px;
+}
+
 /* ==========================================
    NAVBAR
    ========================================== */

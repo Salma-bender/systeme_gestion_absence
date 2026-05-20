@@ -18,15 +18,17 @@ export interface RegisterRequest {
 export interface AuthResponse {
   token: string;
   role: string;
+  userId: number;
   message?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly API_URL = 'http://localhost:8081/api/auth';
+  private readonly API_URL = 'http://localhost:8080/api/auth';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly ROLE_KEY = 'auth_role';
+  private readonly USER_ID_KEY = 'auth_user_id';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -36,6 +38,9 @@ export class AuthService {
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.token);
         localStorage.setItem(this.ROLE_KEY, response.role);
+        if (response.userId) {
+          localStorage.setItem(this.USER_ID_KEY, String(response.userId));
+        }
       })
     );
   }
@@ -46,6 +51,9 @@ export class AuthService {
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.token);
         localStorage.setItem(this.ROLE_KEY, response.role);
+        if (response.userId) {
+          localStorage.setItem(this.USER_ID_KEY, String(response.userId));
+        }
       })
     );
   }
@@ -54,6 +62,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.ROLE_KEY);
+    localStorage.removeItem(this.USER_ID_KEY);
     this.router.navigate(['/login']);
   }
 
@@ -67,6 +76,12 @@ export class AuthService {
     return localStorage.getItem(this.ROLE_KEY);
   }
 
+  /** Récupérer l'ID de l'utilisateur connecté */
+  getUserId(): number | null {
+    const id = localStorage.getItem(this.USER_ID_KEY);
+    return id ? Number(id) : null;
+  }
+
   /** Vérifier si l'utilisateur est connecté */
   isLoggedIn(): boolean {
     return !!this.getToken();
@@ -75,5 +90,10 @@ export class AuthService {
   /** Vérifier si l'utilisateur est admin */
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
+  }
+
+  /** Vérifier si l'utilisateur est étudiant */
+  isStudent(): boolean {
+    return this.getRole() === 'STUDENT';
   }
 }

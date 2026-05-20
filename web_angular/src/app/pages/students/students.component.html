@@ -1,55 +1,71 @@
-<div class="container mt-4">
-  <h2>Gestion des Étudiants</h2>
+<div class="page-container">
+  <div class="page-header">
+    <h2>{{ authService.isAdmin() ? 'Gestion des Étudiants' : 'Liste des Étudiants' }}</h2>
+  </div>
 
-  <!-- Formulaire ajout étudiant -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Ajouter un étudiant</h5>
+  <!-- Formulaire ajout : ADMIN uniquement -->
+  <div class="form-card" *ngIf="authService.isAdmin()">
+    <h3 style="font-size:18px;font-weight:700;margin-bottom:20px;">Ajouter un étudiant</h3>
 
-      <div class="mb-3">
-        <label class="form-label">Prénom</label>
-        <input type="text" class="form-control" [(ngModel)]="firstName" placeholder="Prénom" />
-      </div>
+    <div class="form-group">
+      <label>Prénom</label>
+      <input type="text" [(ngModel)]="firstName" placeholder="Prénom" />
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">Nom</label>
-        <input type="text" class="form-control" [(ngModel)]="lastName" placeholder="Nom" />
-      </div>
+    <div class="form-group">
+      <label>Nom</label>
+      <input type="text" [(ngModel)]="lastName" placeholder="Nom" />
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">Photo</label>
-        <input type="file" class="form-control" accept="image/*" (change)="onFileChange($event)" />
-      </div>
+    <div class="form-group">
+      <label>Photo</label>
+      <input type="file" accept="image/*" (change)="onFileChange($event)" />
+    </div>
 
-      <button class="btn btn-primary" (click)="submit()" [disabled]="loading">
+    <div class="form-actions">
+      <button class="btn-primary" (click)="submit()" [disabled]="loading">
         {{ loading ? 'Enregistrement...' : 'Ajouter' }}
       </button>
+    </div>
 
-      <div *ngIf="message" class="alert mt-3" [class.alert-success]="message.includes('succès')" [class.alert-danger]="!message.includes('succès')">
-        {{ message }}
-      </div>
+    <div *ngIf="message"
+         [style.color]="message.includes('succès') ? '#16a34a' : '#dc2626'"
+         [style.background]="message.includes('succès') ? '#dcfce7' : '#fee2e2'"
+         style="padding:12px 16px;border-radius:8px;margin-top:16px;">
+      {{ message }}
     </div>
   </div>
 
+  <!-- Message d'erreur pour teacher -->
+  <div *ngIf="message && !authService.isAdmin()" class="error">{{ message }}</div>
+
+  <!-- Loading -->
+  <div *ngIf="listLoading" class="loading">Chargement des étudiants...</div>
+
   <!-- Liste des étudiants -->
-  <h5>Liste des étudiants ({{ students.length }})</h5>
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Prénom</th>
-        <th>Nom</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let s of students">
-        <td>{{ s.id }}</td>
-        <td>{{ s.firstName }}</td>
-        <td>{{ s.lastName }}</td>
-      </tr>
-      <tr *ngIf="students.length === 0">
-        <td colspan="3" class="text-center text-muted">Aucun étudiant enregistré.</td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-container *ngIf="!listLoading">
+    <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">
+      Liste des étudiants ({{ students.length }})
+    </h3>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Prénom</th>
+          <th>Nom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of students">
+          <td>{{ s.id }}</td>
+          <td>{{ s.firstName }}</td>
+          <td>{{ s.lastName }}</td>
+        </tr>
+        <tr *ngIf="students.length === 0">
+          <td colspan="3" class="empty">Aucun étudiant enregistré.</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
 </div>
