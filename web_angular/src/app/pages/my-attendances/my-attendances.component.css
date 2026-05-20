@@ -1,0 +1,20 @@
+.student-container { min-height: 100vh; background: #f1f5f9; }
+.student-header { background: #1e293b; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.student-brand { color: #fff; font-size: 18px; font-weight: 700; }
+.student-info { display: flex; align-items: center; gap: 16px; }
+.student-name { color: #e2e8f0; font-weight: 600; }
+.student-role { background: #3b82f6; color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.btn-logout { background: #ef4444; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.student-content { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+.student-content h2 { font-size: 26px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+.subtitle { color: #64748b; margin-bottom: 28px; }
+.stats-card { background: #fff; border-radius: 12px; padding: 24px 32px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.stats-number { font-size: 42px; font-weight: 800; color: #3b82f6; }
+.stats-label { color: #64748b; font-size: 15px; }
+.att-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.att-table th { background: #f8fafc; padding: 12px 20px; text-align: left; font-size: 12px; font-weight: 700; color: #475569; letter-spacing: 0.5px; }
+.att-table td { padding: 14px 20px; border-top: 1px solid #f1f5f9; font-size: 14px; color: #1e293b; }
+.att-table tr:hover td { background: #f8fafc; }
+.loading { color: #64748b; padding: 40px; text-align: center; }
+.error-msg { background: #fee2e2; color: #dc2626; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+.empty { text-align: center; color: #94a3b8; padding: 60px; background: #fff; border-radius: 12px; }

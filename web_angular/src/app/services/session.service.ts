@@ -5,7 +5,7 @@ import { Session, SessionRequest } from '../models/session.model';
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {
-  private baseUrl = 'http://localhost:8081/api/session';
+  private baseUrl = 'http://localhost:8080/api/session';
 
   constructor(private http: HttpClient) {}
 

@@ -25,7 +25,7 @@ export interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly API_URL = 'http://localhost:8081/api/auth';
+  private readonly API_URL = 'http://localhost:8080/api/auth';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly ROLE_KEY = 'auth_role';
   private readonly USER_ID_KEY = 'auth_user_id';
@@ -90,5 +90,10 @@ export class AuthService {
   /** Vérifier si l'utilisateur est admin */
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
+  }
+
+  /** Vérifier si l'utilisateur est étudiant */
+  isStudent(): boolean {
+    return this.getRole() === 'STUDENT';
   }
 }
