@@ -15,7 +15,7 @@
     <a class="nav-link" routerLink="/students" routerLinkActive="active">Étudiants</a>
     <a class="nav-link" routerLink="/attendance" routerLinkActive="active" *ngIf="!authService.isAdmin()">Présences</a>
     <a class="nav-link" routerLink="/sessions" routerLinkActive="active" *ngIf="!authService.isAdmin()">Séances</a>
-    <a class="nav-link" routerLink="/settings" routerLinkActive="active" *ngIf="authService.isAdmin()">Paramètres</a>
+    <a class="nav-link" routerLink="/settings" routerLinkActive="active" *ngIf="authService.isAdmin()">Enseignants</a>
   </div>
 
   <!-- Droite : rôle + déconnexion -->

@@ -38,7 +38,7 @@
         <li><a routerLink="/students">Gérer les étudiants</a></li>
         <li *ngIf="!authService.isAdmin()"><a routerLink="/sessions">Gérer les séances</a></li>
         <li *ngIf="!authService.isAdmin()"><a routerLink="/attendance">Consulter les présences</a></li>
-        <li *ngIf="authService.isAdmin()"><a routerLink="/settings">Paramètres (enseignants)</a></li>
+        <li *ngIf="authService.isAdmin()"><a routerLink="/settings">Gérer les enseignants</a></li>
       </ul>
     </div>
   </div>

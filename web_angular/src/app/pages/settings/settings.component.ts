@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService, Teacher } from '../../services/api.service';
@@ -22,7 +22,8 @@ export class SettingsComponent implements OnInit {
     private apiService: ApiService,
     public authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     // Redirect non-admin users
     if (!this.authService.isAdmin()) {
@@ -46,10 +47,12 @@ export class SettingsComponent implements OnInit {
       next: (data) => {
         this.teachers = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'Erreur lors du chargement des enseignants.';
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -72,6 +75,7 @@ export class SettingsComponent implements OnInit {
       error: () => {
         this.errorMessage = 'Erreur lors de la création de l\'enseignant.';
         this.isSubmitting = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -83,9 +87,11 @@ export class SettingsComponent implements OnInit {
       next: () => {
         this.teachers = this.teachers.filter(t => t.id !== id);
         this.successMessage = 'Enseignant supprimé.';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'Erreur lors de la suppression.';
+        this.cdr.detectChanges();
       }
     });
   }
