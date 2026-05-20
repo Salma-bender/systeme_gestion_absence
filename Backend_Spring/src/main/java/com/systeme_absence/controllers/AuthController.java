@@ -41,7 +41,7 @@ public class AuthController {
             return ResponseEntity.status(201).body(response);
         } catch (IllegalArgumentException e) {
             // Email déjà utilisé ou rôle invalide → 400
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(400).body(java.util.Map.of("error", e.getMessage()));
         }
     }
 }
