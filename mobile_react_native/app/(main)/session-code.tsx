@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
+    ActivityIndicator,
     Alert,
     KeyboardAvoidingView,
     Platform,
@@ -11,6 +12,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { Colors } from '../../constants/theme';
+import { validateSessionCode } from '../../services/api';
 
 export default function SessionCodeScreen() {
   const router = useRouter();
@@ -20,25 +23,36 @@ export default function SessionCodeScreen() {
     subjectSub: string;
   }>();
   const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleValidate = () => {
+  const handleValidate = async () => {
     if (code.trim().length < 4) {
       Alert.alert('Code invalide', 'Veuillez entrer un code de séance valide.');
       return;
     }
-    // TODO: validate code with backend
-    router.push({
-      pathname: '/(main)/scan',
-      params: { subjectId, subjectName, subjectSub, sessionCode: code.trim() },
-    });
+    setLoading(true);
+    try {
+      const session = await validateSessionCode(code.trim().toUpperCase());
+      router.push({
+        pathname: '/(main)/scan',
+        params: {
+          subjectId,
+          subjectName: session.subject || subjectName,
+          subjectSub,
+          sessionCode: session.code,
+          sessionId: String(session.id),
+        },
+      });
+    } catch (e: any) {
+      Alert.alert('Code invalide', e.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.inner}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAvoidingView style={styles.inner} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <TouchableOpacity style={styles.back} onPress={() => router.back()}>
           <Text style={styles.backText}>‹ Retour</Text>
         </TouchableOpacity>
@@ -48,13 +62,15 @@ export default function SessionCodeScreen() {
           <Text style={styles.subject}>{subjectName}</Text>
           {subjectSub ? <Text style={styles.subjectSub}>{subjectSub}</Text> : null}
 
-          <Text style={styles.sectionTitle}>Code de séance</Text>
-          <Text style={styles.hint}>Entrez le code fourni par votre enseignant</Text>
+          {/* Code box style web */}
+          <View style={styles.codeBox}>
+            <Text style={styles.codeBoxLabel}>CODE DE SÉANCE</Text>
+          </View>
 
           <TextInput
             style={styles.codeInput}
             placeholder="Ex: A1B2C3"
-            placeholderTextColor="#adb5bd"
+            placeholderTextColor={Colors.textLight}
             value={code}
             onChangeText={setCode}
             autoCapitalize="characters"
@@ -62,8 +78,11 @@ export default function SessionCodeScreen() {
             textAlign="center"
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleValidate}>
-            <Text style={styles.buttonText}>Valider</Text>
+          <TouchableOpacity style={styles.button} onPress={handleValidate} disabled={loading}>
+            {loading
+              ? <ActivityIndicator color={Colors.white} />
+              : <Text style={styles.buttonText}>Valider</Text>
+            }
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -72,33 +91,41 @@ export default function SessionCodeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1, backgroundColor: Colors.cream },
   inner: { flex: 1 },
   back: { padding: 20, paddingBottom: 0 },
-  backText: { color: '#3b82f6', fontSize: 16 },
+  backText: { color: Colors.brown, fontSize: 16, fontWeight: '600' },
   content: { flex: 1, justifyContent: 'center', padding: 28 },
-  label: { fontSize: 11, fontWeight: '700', color: '#475569', letterSpacing: 1 },
-  subject: { color: '#1e293b', fontSize: 22, fontWeight: '700', marginTop: 4 },
-  subjectSub: { color: '#94a3b8', fontSize: 14, marginTop: 2, marginBottom: 8 },
-  sectionTitle: { color: '#1e293b', fontSize: 18, fontWeight: '700', marginTop: 40, marginBottom: 4 },
-  hint: { color: '#94a3b8', fontSize: 13, marginBottom: 20 },
+  label: { fontSize: 11, fontWeight: '700', color: Colors.brown, letterSpacing: 1, textTransform: 'uppercase' },
+  subject: { color: Colors.brownDark, fontSize: 22, fontWeight: '700', marginTop: 4 },
+  subjectSub: { color: Colors.textLight, fontSize: 14, marginTop: 2, marginBottom: 8 },
+  codeBox: {
+    backgroundColor: Colors.brownDark,
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 32,
+    marginBottom: 8,
+  },
+  codeBoxLabel: { fontSize: 12, color: 'rgba(255,255,255,0.7)', letterSpacing: 1, marginBottom: 4 },
+  hint: { color: 'rgba(255,255,255,0.9)', fontSize: 13 },
   codeInput: {
-    backgroundColor: '#f1f5f9',
-    color: '#1e293b',
-    borderRadius: 14,
+    backgroundColor: Colors.white,
+    color: Colors.text,
+    borderRadius: 8,
     padding: 20,
     fontSize: 24,
     fontWeight: '700',
     letterSpacing: 6,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderWidth: 1.5,
+    borderColor: Colors.border,
     marginBottom: 24,
+    marginTop: 12,
   },
   button: {
-    backgroundColor: '#3b82f6',
-    borderRadius: 12,
+    backgroundColor: Colors.brown,
+    borderRadius: 8,
     padding: 16,
     alignItems: 'center',
   },
-  buttonText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  buttonText: { color: Colors.white, fontWeight: '700', fontSize: 16 },
 });
