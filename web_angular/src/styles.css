@@ -132,6 +132,10 @@ body {
   flex-direction: column;
   padding: 16px 0;
   flex-shrink: 0;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
 }
 
 .sidebar.collapsed { width: 60px; }

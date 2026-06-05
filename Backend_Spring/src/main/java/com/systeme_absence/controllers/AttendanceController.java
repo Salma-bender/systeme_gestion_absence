@@ -92,4 +92,36 @@ public class AttendanceController {
     public ResponseEntity<List<Attendance>> getAllAttendances() {
         return ResponseEntity.ok(attendanceService.getAllAttendances());
     }
+
+    /**
+     * POST /attendance/manual
+     * Ajoute manuellement une présence pour un étudiant.
+     * Body JSON : { "studentId": 1 }
+     */
+    @PostMapping("/manual")
+    public ResponseEntity<?> addManual(@RequestBody Map<String, Long> body) {
+        try {
+            Long studentId = body.get("studentId");
+            Student student = studentService.findById(studentId);
+            if (student == null) return ResponseEntity.badRequest().body("Étudiant introuvable");
+            Attendance saved = attendanceService.addManualAttendance(student);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erreur: " + e.getMessage());
+        }
+    }
+
+    /**
+     * DELETE /attendance/{id}
+     * Supprime une présence par son ID.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAttendance(@PathVariable Long id) {
+        try {
+            attendanceService.deleteAttendance(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erreur: " + e.getMessage());
+        }
+    }
 }

@@ -60,6 +60,16 @@ export class ApiService {
     return this.http.get<Attendance[]>(`${this.baseUrl}/attendance`);
   }
 
+  /** Ajouter manuellement une présence */
+  addAttendance(studentId: number): Observable<Attendance> {
+    return this.http.post<Attendance>(`${this.baseUrl}/attendance/manual`, { studentId });
+  }
+
+  /** Supprimer une présence */
+  deleteAttendance(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/attendance/${id}`);
+  }
+
   // ==========================================
   // ENSEIGNANTS (ADMIN uniquement)
   // ==========================================

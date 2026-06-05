@@ -1,17 +1,39 @@
 <div class="page-container">
   <div class="page-header">
     <h2>Liste des Présences</h2>
-    <button class="btn-secondary" (click)="loadAttendances()">🔄 Actualiser</button>
+    <button class="btn-secondary" (click)="loadAttendances()">Actualiser</button>
   </div>
 
   <div *ngIf="message" class="error">{{ message }}</div>
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
 
+  <!-- Formulaire ajout manuel -->
+  <div class="form-card" style="margin-bottom:24px">
+    <h3 style="margin-bottom:16px">Ajouter une présence manuellement</h3>
+    <div style="display:flex;gap:12px;align-items:flex-end">
+      <div class="form-group" style="flex:1;margin:0">
+        <label>Sélectionner un étudiant</label>
+        <select [(ngModel)]="selectedStudentId">
+          <option [value]="null" disabled>-- Choisir un étudiant --</option>
+          <option *ngFor="let s of students" [value]="s.id">
+            {{ s.firstName }} {{ s.lastName }}
+          </option>
+        </select>
+      </div>
+      <button class="btn-primary" (click)="addManual()" [disabled]="!selectedStudentId || loading">
+        {{ loading ? 'Ajout...' : 'Ajouter' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tableau des présences -->
   <table class="data-table">
     <thead>
       <tr>
         <th>ID</th>
         <th>Étudiant</th>
         <th>Date / Heure</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -19,9 +41,12 @@
         <td>{{ a.id }}</td>
         <td>{{ a.student.firstName }} {{ a.student.lastName }}</td>
         <td>{{ a.detectedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+        <td>
+          <button class="btn-danger" (click)="delete(a.id)">Supprimer</button>
+        </td>
       </tr>
       <tr *ngIf="attendances.length === 0">
-        <td colspan="3" class="empty">Aucune présence enregistrée.</td>
+        <td colspan="4" class="empty">Aucune présence enregistrée.</td>
       </tr>
     </tbody>
   </table>

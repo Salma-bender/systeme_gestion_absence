@@ -30,11 +30,13 @@ public class StudentService {
         student.setPhotoPath(image.getOriginalFilename());
         Student saved = studentRepository.save(student);
 
-        // 2. Envoyer l'image à l'API AI pour enregistrer l'embedding
-        Map<String, Object> aiResult = aiService.registerFace(String.valueOf(saved.getId()), image);
-
-        // Log du résultat AI (succès ou doublon)
-        System.out.println("AI register-face result: " + aiResult);
+        // 2. Envoyer l'image à l'API AI (optionnel — ne bloque pas si AI indisponible)
+        try {
+            Map<String, Object> aiResult = aiService.registerFace(String.valueOf(saved.getId()), image);
+            System.out.println("AI register-face result: " + aiResult);
+        } catch (Exception e) {
+            System.out.println("AI API indisponible, étudiant sauvegardé sans embedding: " + e.getMessage());
+        }
 
         return saved;
     }

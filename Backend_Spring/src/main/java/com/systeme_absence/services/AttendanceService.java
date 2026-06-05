@@ -48,4 +48,21 @@ public class AttendanceService {
     public List<Attendance> getAllAttendances() {
         return attendanceRepository.findAll();
     }
+
+    /**
+     * Ajoute manuellement une présence pour un étudiant.
+     */
+    public Attendance addManualAttendance(Student student) {
+        Attendance attendance = new Attendance();
+        attendance.setStudent(student);
+        attendance.setDetectedAt(java.time.LocalDateTime.now());
+        return attendanceRepository.save(attendance);
+    }
+
+    /**
+     * Supprime une présence par son ID.
+     */
+    public void deleteAttendance(Long id) {
+        attendanceRepository.deleteById(id);
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService, Student } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -16,7 +16,7 @@ export class StudentsComponent implements OnInit {
   loading = false;
   listLoading = true;
 
-  constructor(private api: ApiService, public authService: AuthService) {}
+  constructor(private api: ApiService, public authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadStudents();
@@ -25,10 +25,15 @@ export class StudentsComponent implements OnInit {
   loadStudents(): void {
     this.listLoading = true;
     this.api.getStudents().subscribe({
-      next: (data) => { this.students = data; this.listLoading = false; },
+      next: (data) => {
+        this.students = data;
+        this.listLoading = false;
+        this.cdr.detectChanges();
+      },
       error: (err) => {
         this.message = 'Erreur chargement étudiants : ' + (err.message || err.status);
         this.listLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -57,6 +62,7 @@ export class StudentsComponent implements OnInit {
       error: (err) => {
         this.message = 'Erreur: ' + (err.error || err.message);
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }

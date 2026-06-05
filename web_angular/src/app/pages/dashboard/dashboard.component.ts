@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService, DashboardStats } from '../../services/api.service';
@@ -19,18 +19,25 @@ export class DashboardComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private sessionService: SessionService,
-    public authService: AuthService
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     if (this.authService.isAdmin()) {
-      // Single fast call for admin
       this.apiService.getStats().subscribe({
-        next: (data) => { this.stats = data; this.isLoading = false; },
-        error: () => { this.errorMessage = 'Erreur lors du chargement des statistiques.'; this.isLoading = false; }
+        next: (data) => {
+          this.stats = data;
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des statistiques.';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
       });
     } else {
-      // Fire all 3 requests in parallel with forkJoin
       forkJoin({
         students: this.apiService.getStudents().pipe(catchError(() => of([]))),
         attendances: this.apiService.getAttendances().pipe(catchError(() => of([]))),
@@ -41,8 +48,13 @@ export class DashboardComponent implements OnInit {
           this.stats.totalAttendances = attendances.length;
           this.stats.activeSessions = (sessions as any[]).filter((s: any) => s.status === 'ACTIVE').length;
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
-        error: () => { this.errorMessage = 'Erreur lors du chargement.'; this.isLoading = false; }
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement.';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
       });
     }
   }
